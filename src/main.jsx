@@ -6,13 +6,68 @@ export const weddingData = {
   bride: { name: 'അനുശ്രീ മോഹൻ', father: 'മോഹനൻ എ പി', mother: 'ബിന്ദു മോഹ', house: 'ആശാരിപറമ്പിൽ ഹൗസ്', address: ['വള്ളിക്കാട്', 'പി ഒ വഴിക്കടവ് ', 'മലപ്പുറം - 679333'] },
   groom: { name: 'ശ്രീരാജ് കെ', father: 'കണ്ണപുരക്കാരൻ സുരേശ', mother: 'വത്സല പി പി', house: 'കണ്ണപുരക്കാരൻ ഹൗസ്', address: ['വൻകുളത്ത് വയൽ', 'പി ഒ അഴീക്കോട്', 'കണ്ണൂർ - 670009'] },
   wedding: { date: '10 ഏപ്രിൽ 2027', day: 'ശനിയാഴ്ച', time: 'ഉച്ചയ്ക്ക് 12 മണി മുതൽ', venue: 'ക്രൈസ്റ്റ് ദി കിംഗ് പാരിഷ് ഹാൾ', location: 'വഴിക്കടവ്', mapUrl: 'https://maps.app.goo.gl/dbYHzCtmvpNHADSv6' },
-  groomReception: { date: '11 ഏപ്രിൽ 2027', time: 'വൈകിട്ട് 4 മണി മുതൽ 8 മണി വരെ', venue: 'ചെക്കന്റെ വീട്ടിൽ', mapUrl: 'https://maps.app.goo.gl/VRp4pXDLXrNSUv7e8' },
+  groomReception: { date: '11 ഏപ്രിൽ 2027', time: 'വൈകിട്ട് 4 മണി മുതൽ 8 മണി വരെ', venue: 'വരന്റെ വീട്ടിൽ', mapUrl: 'https://maps.app.goo.gl/VRp4pXDLXrNSUv7e8' },
   engagement: { url: 'https://album-two-opal.vercel.app/' },
   closing: { family: 'വേദമിത്ര · വൈഭവ് · അനുഷ · സുസ്മിത · സുഭീഷ്‌നാഥ്  ', signature: 'അനുശ്രീരാജ്' },
 };
 
+// Background images cycled across pages (couple photos)
+const BG_IMAGES = [
+  '/assets/couple-main.jpg',
+  '/assets/couple-1.jpg',
+  '/assets/couple-2.jpg',
+  '/assets/couple-main.jpg',
+  '/assets/couple-3.jpg',
+  '/assets/couple-4.jpg',
+  '/assets/couple-5.jpg',
+  '/assets/couple-6.jpg',
+];
+
 const pages = ['സ്വാഗതം', 'വധൂവരന്മാർ', 'വിവാഹദിനം', 'കല്യാണ സൽക്കാരം', 'വരന്റെ സൽക്കാരം', 'ക്ഷണം', 'ഓർമ്മകൾ', 'മംഗളാശംസകൾ'];
 const SCRATCH_THRESHOLD = 0.45;
+
+// ── Petal rain symbols ────────────────────────────────────────────────
+const PETAL_SYMBOLS = ['❀', '✿', '❁', '✾', '✽', '❃', '❋'];
+
+function FlowerRain() {
+  // Generate 22 petals with staggered positions/timings
+  const petals = Array.from({ length: 22 }, (_, i) => ({
+    id: i,
+    symbol: PETAL_SYMBOLS[i % PETAL_SYMBOLS.length],
+    left: `${(i * 4.7 + Math.sin(i * 1.3) * 8 + 2) % 96}%`,
+    duration: `${6 + (i % 7) * 1.1}s`,
+    delay: `${(i * 0.55) % 8}s`,
+    fontSize: `${0.85 + (i % 5) * 0.18}rem`,
+    opacity: 0.55 + (i % 4) * 0.1,
+  }));
+  return (
+    <div className="flower-rain" aria-hidden="true">
+      {petals.map(p => (
+        <span
+          key={p.id}
+          className="petal"
+          style={{
+            left: p.left,
+            fontSize: p.fontSize,
+            animationDuration: p.duration,
+            animationDelay: p.delay,
+          }}
+        >
+          {p.symbol}
+        </span>
+      ))}
+    </div>
+  );
+}
+
+// ── Per-page background ──────────────────────────────────────────────
+function PageBg({ src }) {
+  return (
+    <div className="page-bg">
+      <img src={src} alt="" aria-hidden="true" loading="lazy" />
+    </div>
+  );
+}
 
 function DecorativeBorder({ children, className = '' }) { return <div className={`frame ${className}`}><div className="frame-inner">{children}</div></div>; }
 function SectionTitle({ children, eyebrow }) { return <header className="section-title">{eyebrow && <span className="eyebrow">{eyebrow}</span>}<h2>{children}</h2><div className="ornament" aria-hidden="true"><i />❈<i /></div></header>; }
@@ -46,6 +101,7 @@ function MusicControl() {
   const toggle = async () => { if(playing){audioRef.current.pause();setPlaying(false);localStorage.setItem('wedding-music','off');}else await play(); };
   return <div className="music-wrap"><audio ref={audioRef} src="/assets/background-music.mp3" loop onError={()=>{setPlaying(false);setNeedsGesture(false);}} />{needsGesture&&<span className="music-hint">സംഗീതം കേൾക്കാൻ അമർത്തൂ</span>}<button className="music-control" aria-label={`${playing?'സംഗീതം നിർത്തുക':'സംഗീതം പ്ലേ ചെയ്യുക'}; ${muted?'മ്യൂട്ട്':'ശബ്ദം'}`} onClick={toggle}>{playing?'♫':'♪'}</button><button className="mute-control" aria-label={muted?'ശബ്ദം പുനഃസ്ഥാപിക്കുക':'മ്യൂട്ട് ചെയ്യുക'} onClick={()=>{const next=!muted;setMuted(next);audioRef.current.muted=next;}}>{muted?'×':'·'}</button></div>;
 }
+
 function PageNavigation({ active, goTo }) { return <nav className="page-dots" aria-label="ക്ഷണക്കത്തിന്റെ പേജുകൾ">{pages.map((label,i)=><button key={label} className={active===i?'active':''} aria-label={`${i+1}. ${label}`} aria-current={active===i?'step':undefined} onClick={()=>goTo(i)}><span>{label}</span></button>)}</nav>; }
 
 function App() {
@@ -53,16 +109,113 @@ function App() {
   useEffect(()=>{const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)setActive(Number(e.target.dataset.page));}),{threshold:.55});sectionRefs.current.forEach(s=>s&&observer.observe(s));return()=>observer.disconnect();},[]);
   const goTo=(i)=>sectionRefs.current[i]?.scrollIntoView({behavior:'smooth',block:'start'});
   return <>
+    <FlowerRain />
     <PageNavigation active={active} goTo={goTo}/><MusicControl/>
     <main>
-      <section className="page hero" data-page="0" ref={el=>sectionRefs.current[0]=el}><div className="hero-photo" aria-hidden="true"><CouplePhoto src="/assets/couple-main.jpg" alt="വധൂവരന്മാരുടെ ചിത്രം"/></div><DecorativeBorder className="hero-frame"><div className="hero-copy"><span className="eyebrow">മംഗളകരമായ ക്ഷണം</span><h1>മാംഗല്യം</h1><div className="ornament" aria-hidden="true"><i/>❈<i/></div><p className="name">{weddingData.bride.name}</p><span className="ampersand">&</span><p className="name">{weddingData.groom.name}</p><p className="invite-line">ഞങ്ങളുടെ സന്തോഷത്തിൽ പങ്കുചേരാൻ<br/>എല്ലാവരെയും സ്നേഹപൂർവ്വം ക്ഷണിക്കുന്നു.</p><button className="scroll-cue" onClick={()=>goTo(1)} aria-label="അടുത്ത പേജിലേക്ക് പോകുക">↓</button></div></DecorativeBorder></section>
-      <section className="page couple-page" data-page="1" ref={el=>sectionRefs.current[1]=el}><SectionTitle eyebrow="ഞങ്ങളുടെ പ്രണയ കഥയുടെ">പുതിയ അദ്ധ്യായം</SectionTitle><p className="lead">രണ്ട് ഹൃദയങ്ങൾ ഒന്നായി പുതിയ ജീവിതത്തിലേക്ക് കടക്കുന്നു </p><div className="couple-grid"><article className="person"><CouplePhoto src="/assets/bride.jpg" alt="വധു അനുശ്രീ മോഹൻ"/><h3>{weddingData.bride.name}</h3><p>{weddingData.bride.father}യുടെയും<br/>{weddingData.bride.mother}ന്റെയും മകൾ</p><address>{weddingData.bride.house}<br/>{weddingData.bride.address.map(a=><React.Fragment key={a}>{a}<br/></React.Fragment>)}</address></article><span className="between-ornament" aria-hidden="true">❈</span><article className="person"><CouplePhoto src="/assets/groom.jpg" alt="വരൻ ശ്രീരാജ് കെ"/><h3>{weddingData.groom.name}</h3><p>{weddingData.groom.father}ന്റെയും<br/>{weddingData.groom.mother}യുടെയും മകൻ</p><address>{weddingData.groom.house}<br/>{weddingData.groom.address.map(a=><React.Fragment key={a}>{a}<br/></React.Fragment>)}</address></article></div></section>
-      <section className={`page scratch-page ${celebrate?'celebrate':''}`} data-page="2" ref={el=>sectionRefs.current[2]=el}><SectionTitle eyebrow="ഒരു ചെറിയ രഹസ്യം">എന്നാണു ആ ദിവസം?</SectionTitle><p className="lead">നിങ്ങൾ തന്നെ കണ്ടു പിടിക്കൂ!</p><ScratchCard onReveal={()=>setCelebrate(true)}/>{celebrate&&<div className="petals" aria-hidden="true">❀　✿　❀　✿　❀</div>}</section>
-      <section className="page event-page" data-page="3" ref={el=>sectionRefs.current[3]=el}><SectionTitle eyebrow="ഒന്നിച്ചുള്ള ജീവിതത്തിലേക്ക്">കല്യാണ സൽക്കാരം</SectionTitle><LocationCard title={weddingData.wedding.venue} subtitle={weddingData.wedding.location} date={weddingData.wedding.date+' · '+weddingData.wedding.day} time={weddingData.wedding.time} mapUrl={weddingData.wedding.mapUrl}/></section>
-      <section className="page event-page groom-event" data-page="4" ref={el=>sectionRefs.current[4]=el}><SectionTitle eyebrow="സ്നേഹപൂർവ്വം ക്ഷണിക്കുന്നു">വരന്റെ സൽക്കാരം</SectionTitle><LocationCard title={weddingData.groomReception.venue} date={weddingData.groomReception.date} time={weddingData.groomReception.time} mapUrl={weddingData.groomReception.mapUrl}/><CouplePhoto className="side-photo" src="/assets/couple-3.jpg" alt="വധൂവരന്മാരുടെ ഓർമ്മച്ചിത്രം"/></section>
-      <section className="page message-page" data-page="5" ref={el=>sectionRefs.current[5]=el}><CouplePhoto className="message-photo" src="/assets/couple-4.jpg" alt="വധൂവരന്മാരുടെ ചിത്രം"/><DecorativeBorder><div className="message-copy"><SectionTitle>നിങ്ങളും നിങ്ങളുടെ കുടുംബസമേതവും</SectionTitle><p>ഞങ്ങളുടെ ഈ സന്തോഷാഘോഷത്തിൽ</p><p>പങ്കുചേരുവാൻ സാദരം ക്ഷണിക്കുന്നു.</p></div></DecorativeBorder></section>
-      <section className="page memories-page" data-page="6" ref={el=>sectionRefs.current[6]=el}><CouplePhoto className="memories-photo" src="/assets/couple-5.jpg" alt="നിശ്ചയത്തിന്റെ സന്തോഷ നിമിഷം"/><DecorativeBorder><SectionTitle eyebrow="മനോഹര നിമിഷങ്ങൾ">ഞങ്ങളുടെ Engagement ഓർമ്മകൾ</SectionTitle><p className="lead">ഞങ്ങളുടെ മനോഹരമായ Engagement നിമിഷങ്ങൾ<br/>കാണുവാൻ താഴെയുള്ള ലിങ്കിൽ ക്ലിക്ക് ചെയ്യുക.</p><a className="gold-button" href={weddingData.engagement.url} target="_blank" rel="noopener noreferrer">ഓർമ്മകളിലേക്ക് പോകാം <span aria-hidden="true">↗</span></a></DecorativeBorder></section>
-      <section className="page closing-page" data-page="7" ref={el=>sectionRefs.current[7]=el}><CouplePhoto className="closing-photo" src="/assets/couple-6.jpg" alt="അനുശ്രീയും ശ്രീരാജും"/><DecorativeBorder><div className="closing-copy"><span className="eyebrow">സ്നേഹത്തോടെ</span><h2>സൗഹാർദ്ദപൂർവ്വം</h2><p>{weddingData.closing.family}</p><span className="closing-and">എന്ന്</span><h1>{weddingData.closing.signature}</h1><div className="ornament" aria-hidden="true"><i/>❈<i/></div><button className="back-top" onClick={()=>goTo(0)}>↑</button></div></DecorativeBorder></section>
+      {/* PAGE 0 — Hero */}
+      <section className="page hero" data-page="0" ref={el=>sectionRefs.current[0]=el}>
+        <PageBg src={BG_IMAGES[0]} />
+        <div className="hero-photo" aria-hidden="true"><CouplePhoto src="/assets/couple-main.jpg" alt="വധൂവരന്മാരുടെ ചിത്രം"/></div>
+        <DecorativeBorder className="hero-frame">
+          <div className="hero-copy">
+            <span className="eyebrow">ക്ഷണപത്രം </span>
+            <h1>മാംഗല്യം</h1>
+            <div className="ornament" aria-hidden="true"><i/>❈<i/></div>
+            <p className="name">{weddingData.bride.name}</p>
+            <span className="ampersand">&</span>
+            <p className="name">{weddingData.groom.name}</p>
+            <p className="invite-line">ഞങ്ങളുടെ സന്തോഷത്തിൽ പങ്കുചേരാൻ<br/>എല്ലാവരെയും സ്നേഹപൂർവ്വം ക്ഷണിക്കുന്നു.</p>
+            <button className="scroll-cue" onClick={()=>goTo(1)} aria-label="അടുത്ത പേജിലേക്ക് പോകുക">↓</button>
+          </div>
+        </DecorativeBorder>
+      </section>
+
+      {/* PAGE 1 — Couple introduction */}
+      <section className="page couple-page" data-page="1" ref={el=>sectionRefs.current[1]=el}>
+        <PageBg src={BG_IMAGES[1]} />
+        <SectionTitle eyebrow="ഞങ്ങളുടെ പ്രണയ കഥയുടെ">പുതിയ അദ്ധ്യായം</SectionTitle>
+        <p className="lead">രണ്ട് ഹൃദയങ്ങൾ ഒന്നായി പുതിയ ജീവിതത്തിലേക്ക് കടക്കുന്നു </p>
+        <div className="couple-grid">
+          <article className="person">
+            <CouplePhoto src="/assets/bride.jpg" alt="വധു അനുശ്രീ മോഹൻ"/>
+            <h3>{weddingData.bride.name}</h3>
+            <p>{weddingData.bride.father}യുടെയും<br/>{weddingData.bride.mother}ന്റെയും മകൾ</p>
+            <address>{weddingData.bride.house}<br/>{weddingData.bride.address.map(a=><React.Fragment key={a}>{a}<br/></React.Fragment>)}</address>
+          </article>
+          <span className="between-ornament" aria-hidden="true">❈</span>
+          <article className="person">
+            <CouplePhoto src="/assets/groom.jpg" alt="വരൻ ശ്രീരാജ് കെ" className="landscape"/>
+            <h3>{weddingData.groom.name}</h3>
+            <p>{weddingData.groom.father}ന്റെയും<br/>{weddingData.groom.mother}യുടെയും മകൻ</p>
+            <address>{weddingData.groom.house}<br/>{weddingData.groom.address.map(a=><React.Fragment key={a}>{a}<br/></React.Fragment>)}</address>
+          </article>
+        </div>
+      </section>
+
+      {/* PAGE 2 — Scratch date reveal */}
+      <section className={`page scratch-page ${celebrate?'celebrate':''}`} data-page="2" ref={el=>sectionRefs.current[2]=el}>
+        <PageBg src={BG_IMAGES[2]} />
+        <SectionTitle eyebrow="ഒരു ചെറിയ രഹസ്യം">എന്നാണു ആ ദിവസം?</SectionTitle>
+        <p className="lead">നിങ്ങൾ തന്നെ കണ്ടു പിടിക്കൂ!</p>
+        <ScratchCard onReveal={()=>setCelebrate(true)}/>
+        {celebrate&&<div className="petals" aria-hidden="true">❀　✿　❀　✿　❀</div>}
+      </section>
+
+      {/* PAGE 3 — Wedding event */}
+      <section className="page event-page" data-page="3" ref={el=>sectionRefs.current[3]=el}>
+        <PageBg src={BG_IMAGES[3]} />
+        <SectionTitle eyebrow="ഒന്നിച്ചുള്ള ജീവിതത്തിലേക്ക്">കല്യാണ സൽക്കാരം</SectionTitle>
+        <LocationCard title={weddingData.wedding.venue} subtitle={weddingData.wedding.location} date={weddingData.wedding.date+' · '+weddingData.wedding.day} time={weddingData.wedding.time} mapUrl={weddingData.wedding.mapUrl}/>
+      </section>
+
+      {/* PAGE 4 — Groom's reception */}
+      <section className="page event-page groom-event" data-page="4" ref={el=>sectionRefs.current[4]=el}>
+        <PageBg src={BG_IMAGES[4]} />
+        <SectionTitle eyebrow="സ്നേഹപൂർവ്വം ക്ഷണിക്കുന്നു">വരന്റെ സൽക്കാരം</SectionTitle>
+        <LocationCard title={weddingData.groomReception.venue} date={weddingData.groomReception.date} time={weddingData.groomReception.time} mapUrl={weddingData.groomReception.mapUrl}/>
+        <CouplePhoto className="side-photo" src="/assets/couple-3.jpg" alt="വധൂവരന്മാരുടെ ഓർമ്മച്ചിത്രം"/>
+      </section>
+
+      {/* PAGE 5 — Invitation message */}
+      <section className="page message-page" data-page="5" ref={el=>sectionRefs.current[5]=el}>
+        <PageBg src={BG_IMAGES[5]} />
+        <CouplePhoto className="message-photo" src="/assets/couple-4.jpg" alt="വധൂവരന്മാരുടെ ചിത്രം"/>
+        <DecorativeBorder>
+          <div className="message-copy">
+            <SectionTitle>നിങ്ങളും നിങ്ങളുടെ കുടുംബസമേതവും</SectionTitle>
+            <p>ഞങ്ങളുടെ ഈ സന്തോഷാഘോഷത്തിൽ</p>
+            <p>പങ്കുചേരുവാൻ സാദരം ക്ഷണിക്കുന്നു.</p>
+          </div>
+        </DecorativeBorder>
+      </section>
+
+      {/* PAGE 6 — Engagement memories */}
+      <section className="page memories-page" data-page="6" ref={el=>sectionRefs.current[6]=el}>
+        <PageBg src={BG_IMAGES[6]} />
+        <CouplePhoto className="memories-photo" src="/assets/couple-5.jpg" alt="നിശ്ചയത്തിന്റെ സന്തോഷ നിമിഷം"/>
+        <DecorativeBorder>
+          <SectionTitle eyebrow="മനോഹര നിമിഷങ്ങൾ">ഞങ്ങളുടെ Engagement ഓർമ്മകൾ</SectionTitle>
+          <p className="lead">ഞങ്ങളുടെ മനോഹരമായ Engagement നിമിഷങ്ങൾ<br/>കാണുവാൻ താഴെയുള്ള ലിങ്കിൽ ക്ലിക്ക് ചെയ്യുക.</p>
+          <a className="gold-button" href={weddingData.engagement.url} target="_blank" rel="noopener noreferrer">ഓർമ്മകളിലേക്ക് പോകാം <span aria-hidden="true">↗</span></a>
+        </DecorativeBorder>
+      </section>
+
+      {/* PAGE 7 — Closing */}
+      <section className="page closing-page" data-page="7" ref={el=>sectionRefs.current[7]=el}>
+        <PageBg src={BG_IMAGES[7]} />
+        <CouplePhoto className="closing-photo" src="/assets/couple-6.jpg" alt="അനുശ്രീയും ശ്രീരാജും"/>
+        <DecorativeBorder>
+          <div className="closing-copy">
+            <span className="eyebrow">സ്നേഹത്തോടെ</span>
+            <h2>സൗഹാർദ്ദപൂർവ്വം</h2>
+            <p>{weddingData.closing.family}</p>
+            <span className="closing-and">എന്ന്</span>
+            <h1>{weddingData.closing.signature}</h1>
+            <div className="ornament" aria-hidden="true"><i/>❈<i/></div>
+            <button className="back-top" onClick={()=>goTo(0)}>↑</button>
+          </div>
+        </DecorativeBorder>
+      </section>
     </main>
   </>;
 }
