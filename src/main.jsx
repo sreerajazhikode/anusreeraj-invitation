@@ -5,8 +5,8 @@ import './style.css';
 export const weddingData = {
   bride: { name: 'അനുശ്രീ മോഹൻ', father: 'മോഹനൻ എ പി', mother: 'ബിന്ദു മോഹ', house: 'ആശാരിപറമ്പിൽ ഹൗസ്', address: ['വള്ളിക്കാട്', 'പി ഒ വഴിക്കടവ് ', 'മലപ്പുറം - 679333'] },
   groom: { name: 'ശ്രീരാജ് കെ', father: 'കണ്ണപുരക്കാരൻ സുരേശ', mother: 'വത്സല പി പി', house: 'കണ്ണപുരക്കാരൻ ഹൗസ്', address: ['വൻകുളത്ത് വയൽ', 'പി ഒ അഴീക്കോട്', 'കണ്ണൂർ - 670009'] },
-  wedding: { date: '04 ഫെബ്രുവരി 2027', day: 'ഞായറാഴ്ച', time: 'ഉച്ചയ്ക്ക് 11 മണി മുതൽ', venue: 'വധൂ ഗൃഹം', location: 'വഴിക്കടവ്', mapUrl: 'https://maps.app.goo.gl/dbYHzCtmvpNHADSv6' },
-  groomReception: { date: '04 ഫെബ്രുവരി 2027', time: 'വൈകിട്ട് 5 മണി മുതൽ 9 മണി വരെ', venue: 'വരന്റെ വീട്ടിൽ', mapUrl: 'https://maps.app.goo.gl/VRp4pXDLXrNSUv7e8' },
+  wedding: { date: '04 ഏപ്രിൽ 2027', day: 'ഞായറാഴ്ച', time: 'ഉച്ചയ്ക്ക് 11 മണി മുതൽ', venue: 'വധൂ ഗൃഹം', location: 'വഴിക്കടവ്', mapUrl: 'https://maps.app.goo.gl/dbYHzCtmvpNHADSv6' },
+  groomReception: { date: '04 ഏപ്രിൽ 2027', time: 'വൈകിട്ട് 5 മണി മുതൽ 9 മണി വരെ', venue: 'വരന്റെ വീട്ടിൽ', mapUrl: 'https://maps.app.goo.gl/VRp4pXDLXrNSUv7e8' },
   engagement: { url: 'https://album-two-opal.vercel.app/' },
   closing: { family: 'വേദമിത്ര · വൈഭവ് · അനുഷ · സുസ്മിത · സുഭീഷ്‌നാഥ്  ', signature: 'അനുശ്രീരാജ്' },
 };
@@ -14,8 +14,8 @@ export const weddingData = {
 export const weddingDataEn = {
   bride: { name: 'Anusree Mohan', father: 'Mohanan A P', mother: 'Bindu Moha', house: 'Asharipparambil House', address: ['Vallikkad', 'P.O. Vazhikkadavu', 'Malappuram - 679333'] },
   groom: { name: 'Sreeraj K', father: 'Kannapurakkaran Suresa', mother: 'Valsala P P', house: 'Kannapurakkaran House', address: ['Vankulathu Vayal', 'P.O. Azhikode', 'Kannur - 670009'] },
-  wedding: { date: '04 February 2027', day: 'Sunday', time: 'From 11 noon', venue: 'Brides Home', location: 'Vazhikkadavu', mapUrl: weddingData.wedding.mapUrl },
-  groomReception: { date: '04 February 2027', time: '5 PM to 9 PM', venue: "At the groom's residence", mapUrl: weddingData.groomReception.mapUrl },
+  wedding: { date: '04 April 2027', day: 'Sunday', time: 'From 11 noon', venue: "Bride's Residence", location: 'Vazhikkadavu', mapUrl: weddingData.wedding.mapUrl },
+  groomReception: { date: '04 April 2027', time: '5 PM to 9 PM', venue: "At the groom's residence", mapUrl: weddingData.groomReception.mapUrl },
   engagement: weddingData.engagement,
   closing: { family: 'Vedamithra · Vaibhav · Anusha · Susmitha · Subishnath', signature: 'Anu Sree Raj' },
 };
