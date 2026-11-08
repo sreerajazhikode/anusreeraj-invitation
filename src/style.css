@@ -18,7 +18,7 @@
 
 * { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; scroll-snap-type: y proximity; }
+html { scroll-behavior: smooth; }
 
 body { margin: 0; min-width: 320px; }
 
@@ -34,7 +34,6 @@ button:focus-visible, a:focus-visible { outline: 3px solid #70283d; outline-offs
   align-items: center;
   justify-content: center;
   padding: clamp(3rem, 7vh, 5.5rem) clamp(1rem, 5vw, 4rem);
-  scroll-snap-align: start;
   overflow: hidden;
   isolation: isolate;
 }
@@ -344,7 +343,6 @@ button:focus-visible, a:focus-visible { outline: 3px solid #70283d; outline-offs
 
 /* ── RESPONSIVE ──────────────────────────────────────────────────────── */
 @media (max-width: 700px) {
-  html { scroll-snap-type: y proximity; }
   .page { padding: 3.8rem 1.2rem; min-height: 100svh; }
   .page::before { inset: 10px; }
   .hero-frame { min-height: 78svh; }
@@ -377,4 +375,34 @@ button:focus-visible, a:focus-visible { outline: 3px solid #70283d; outline-offs
     animation-iteration-count: 1 !important;
     transition-duration: .01ms !important;
   }
+}
+
+/* ── ENTRY GATE (language popup + scratch to reveal date) ───────────── */
+.gate { position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; padding: 1.2rem; background: radial-gradient(ellipse at center, #fffaf1, #f1e3c6); transition: opacity .7s ease, visibility .7s; overflow-y: auto; }
+.gate.gate-out { opacity: 0; visibility: hidden; pointer-events: none; }
+.gate .flower-rain { z-index: 0; }
+.gate-panel { position: relative; z-index: 1; width: min(100%, 600px); text-align: center; padding: clamp(1.4rem, 5vw, 2.4rem); border: 1px solid var(--gold); outline: 1px solid var(--line); outline-offset: 7px; background: rgba(255, 250, 241, .9); animation: arrive .6s both; }
+.lang-popup h2 { color: var(--maroon); font-weight: 500; font-size: clamp(1.3rem, 4vw, 1.8rem); line-height: 1.6; margin: .5rem 0; }
+.lang-popup p { margin: .3rem 0 1rem; color: var(--ink); }
+.lang-options { display: flex; flex-wrap: wrap; gap: .8rem; justify-content: center; }
+.lang-options .gold-button { margin-top: .4rem; min-width: 140px; cursor: pointer; }
+.gold-button.outline { background: transparent; color: var(--maroon); }
+.gold-button.outline:hover { background: rgba(112, 40, 61, .08); }
+.gate-card { width: 100%; }
+.gate-card canvas { z-index: 1; transition: opacity .8s ease; }
+.gate-card canvas.scratched-off { opacity: 0; pointer-events: none; }
+.scratch-progress { height: 6px; margin: .9rem auto 0; width: min(100%, 560px); background: rgba(163, 132, 69, .2); border-radius: 3px; overflow: hidden; }
+.scratch-progress span { display: block; height: 100%; background: var(--maroon); transition: width .15s linear; }
+.gate-actions { min-height: 64px; display: flex; justify-content: center; }
+.gate-enter { cursor: pointer; animation: arrive .5s both; }
+.gate .section-title h2 { font-size: clamp(1.5rem, 5vw, 2.2rem); }
+
+/* ── LANGUAGE TOGGLE / NEXT PAGE ────────────────────────────────────── */
+.lang-toggle { position: fixed; z-index: 60; top: 20px; right: 20px; padding: .4rem .9rem; background: var(--cream); border: 1px solid var(--gold); color: var(--maroon); cursor: pointer; font-size: .85rem; box-shadow: 0 4px 15px #3823191a; }
+.lang-toggle:hover { background: #fff; }
+.next-page { position: fixed; z-index: 12; bottom: 22px; left: 50%; transform: translateX(-50%); width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--gold); background: var(--cream); color: var(--maroon); font-size: 1.4rem; cursor: pointer; box-shadow: 0 4px 15px #3823191a; animation: nudge 1.8s ease-in-out infinite; }
+@keyframes nudge { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, 6px); } }
+@media (max-width: 700px) {
+  .lang-toggle { top: 12px; right: 12px; }
+  .next-page { bottom: 16px; width: 44px; height: 44px; }
 }
